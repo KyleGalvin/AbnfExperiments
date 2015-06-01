@@ -1,18 +1,23 @@
-require("luacurl")
+require "ansicolors"
 
 print("success")
+local httpd_runner = require "httpd_tests"
 
-function test1()
-	local c = curl.new()
-	c:setopt(curl.OPT_WRITEFUNCTION,
-		function(userparam, buffer)
-			print("writing:" .. " " ..buffer)
-		end)
-	c:setopt(curl.OPT_URL,"127.0.0.1")
-	--c:setopt(curl.OPT_HTTPHEADER,exampleHeader)
-	c:setopt(curl.OPT_HTTPGET,true)	
-	c:perform()
-	c:close()
+function testResults(k,v)
+	if k and v then
+		local status = ""
+		local result = v()
+		if result then
+			status = status .. ansicolors.green .. "Success\t" .. ansicolors.reset
+		else
+			status = status .. ansicolors.red .. "FAIL\t" .. ansicolors.reset
+		end
+		local status = status .. ": " .. k 
+		print(status)
+	end
 end
 
-test1()
+for k,v in pairs(httpd_runner) do testResults(k,v) end
+
+local httpd_peg_runner = require "httpd_peg_tests"
+for k,v in pairs(httpd_peg_runner) do testResults(k,v) end

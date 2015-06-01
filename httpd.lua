@@ -1,10 +1,15 @@
+--copas API Reference:
+--http://keplerproject.github.io/copas/reference.html
+
 local socket = require "socket"
+local copas = require "copas"
 
-port = 80
-address = "127.0.0.1"
-maxConnections = 20
-
-
+function fsize (file)
+	local current = file:seek()      -- get current position
+	local size = file:seek("end")    -- get file size
+	file:seek("set", current)        -- restore position
+	return size
+end
 
 function startHeaderBuilder(respCode)
 	local respCodes = {
@@ -17,55 +22,60 @@ function closeHeaderBuilder(partialHeader)
 	return partialHeader .. "\r\n"
 end
 
-local exampleHeader = closeHeaderBuilder(startHeaderBuilder(200))
---[[
-Transfer-Encoding: chunked
-Date: Sat, 28 Nov 2009 04:36:25 GMT
-Server: LiteSpeed
-Connection: close
-X-Powered-By: W3 Total Cache/0.8
-Pragma: public
-Expires: Sat, 28 Nov 2009 05:36:25 GMT
-Etag: "pub1259380237;gz"
-Cache-Control: max-age=3600, public
-Content-Type: text/html; charset=UTF-8
-Last-Modified: Sat, 28 Nov 2009 03:50:37 GMT
-X-Pingback: http://net.tutsplus.com/xmlrpc.php
-Content-Encoding: gzip
-Vary: Accept-Encoding, Cookie, User-Agent
---]]
+function handle(socket)
+	print("handling incoming connection")
+	--local maxConnections = 20
+	--if not server:listen(maxConnections) then
+	--	print("server cannot listen")
+	--else
+		--while true do
+		--	print("waiting for incoming client...")
+		--	local client = server:accept()
+		--end
+	--end
+	requestData = copas.receive(socket)
+	print("requestData: " .. requestData)
+	responseData = "this is my response packet"
+	copas.send(socket,responseData)
+end
 
-print('starting app')
 function bindServer ()
+	local exampleHeader = closeHeaderBuilder(startHeaderBuilder(200))
+	local port = 80
+	local address = "127.0.0.1"
 
-	local server = socket.tcp()
-
-	if not server:bind(address,port)  then
-		print("could not bind to " .. address .. ":" .. port)
-	else
-		if not server:listen(maxConnections) then
-			print("server cannot listen")
-		else
-
-			while true do
-				local client = server:accept()
-				if client then
-					local line, err = client:receive()
-
-					if not err then
-						client:send(exampleHeader)
-						client:close()
-					end
-				else
-					print("server timed out")
-				end
-			end
+	--local server = socket.tcp()
+	local server = socket.bind(address,port)
+	--server:settimeout(0)
+	copas.addserver(server,handle)
+	--[[copas.addthread(function()
+		while true do
+			--print("receiving...")
+			local resp = copas.receive(skt,6)
+			--print("received:",resp or "nil")
+			
 		end
+	end)--]]
+
+	copas.handler(handle)
+	print("serer bound to "..address..":"..port)
+	while true do
+	copas.step()
+	print("copas server running async, continuing with application")
 	end
-	server:close()
+		--		if client then
+		--			local line, err = client:receive()
+
+		--			if not err then
+		--				client:send(exampleHeader)
+		--				client:close()
+		--			end
+		--		else
+		--			print("server timed out")
+		--		end
+		--	end
+		--end
+	--server:close()
 end
 
 bindServer()
-
-
-
