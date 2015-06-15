@@ -1,8 +1,5 @@
 require "ansicolors"
 
-print("success")
-local httpd_runner = require "httpd_tests"
-
 function testResults(k,v)
 	if k and v then
 		local status = ""
@@ -17,7 +14,17 @@ function testResults(k,v)
 	end
 end
 
-for k,v in pairs(httpd_runner) do testResults(k,v) end
+function runTestModule(module)
+	for k,v in pairs(module) do testResults(k,v) end
+end
+
+print("Running all test suites...")
+
+local abnf_runner = require "abnf"
+runTestModule(abnf_runner)
+
+local httpd_runner = require "httpd_tests"
+runTestModule(httpd_runner)
 
 local httpd_peg_runner = require "httpd_peg_tests"
-for k,v in pairs(httpd_peg_runner) do testResults(k,v) end
+runTestModule(httpd_peg_runner)

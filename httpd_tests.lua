@@ -18,7 +18,7 @@ return {
 		--	end)
 		c:perform()
 		c:close()
-		print("curl call sent...")
+		--print("curl call sent...")
 		return true;
 	end
 }
