@@ -1,23 +1,10 @@
--- https://tools.ietf.org/html/rfc5234#appendix-B
-
---[[
-     rulelist       =  1*( rule / (*c-wsp c-nl) )
+       rulelist       =  1*( rule / (*c-wsp c-nl) )
 
          rule           =  rulename defined-as elements c-nl
                                 ; continues if next line starts
                                 ;  with white space
 
          rulename       =  ALPHA *(ALPHA / DIGIT / "-")
-
-
-
-
-
-
-Crocker & Overell           Standards Track                    [Page 10]
-
- 
-RFC 5234                          ABNF                      January 2008
 
 
          defined-as     =  *c-wsp ("=" / "=/") *c-wsp
@@ -67,19 +54,8 @@ RFC 5234                          ABNF                      January 2008
                            [ 1*("." 1*HEXDIG) / ("-" 1*HEXDIG) ]
 
 
-
-
-
-
-Crocker & Overell           Standards Track                    [Page 11]
-
- 
-RFC 5234                          ABNF                      January 2008
-
-
          prose-val      =  "<" *(%x20-3D / %x3F-7E) ">"
                                 ; bracketed string of SP and VCHAR
                                 ;  without angles
                                 ; prose description, to be used as
                                 ;  last resort
---]]
