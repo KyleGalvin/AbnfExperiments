@@ -20,7 +20,7 @@ end
 
 print("Running all test suites...")
 
-local abnf_runner = require "abnf"
+local abnf_runner = require "abnf_test"
 runTestModule(abnf_runner)
 
 local httpd_runner = require "httpd_tests"
