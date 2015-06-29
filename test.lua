@@ -1,30 +1,43 @@
 require "ansicolors"
+local utils = require("utils")
 
-function testResults(k,v)
-	if k and v then
+function testResults(id, name, testFunc)
+	if name and testFunc then
 		local status = ""
-		local result = v()
+		local result = testFunc()
 		if result then
 			status = status .. ansicolors.green .. "Success\t" .. ansicolors.reset
 		else
 			status = status .. ansicolors.red .. "FAIL\t" .. ansicolors.reset
 		end
-		local status = status .. ": " .. k 
+		local status = status .. ": " .. name 
 		print(status)
 	end
 end
 
-function runTestModule(module)
-	for k,v in pairs(module) do testResults(k,v) end
+function runTestModule(moduleName)
+	runTestModule(moduleName, runner)
 end
 
-print("Running all test suites...")
+function runTestModule(name)
+	local module = require(name)
+	if  module ~= nil then
+		print( ansicolors.white .."Running Test Module: " .. ansicolors.yellow .. name .. ansicolors.reset)
+		for i,v in ipairs(module) do 
+			if type(v.name) == "string" and type(v.test == "function") then
+				testResults(i, v.name,v.test) 
+			else
+				print("Bad test in module")	
+			end
+		end
+		print()
+	else
+		print("Module not found:", name)
+	end
+end
 
-local abnf_runner = require "abnf_test"
-runTestModule(abnf_runner)
-
-local httpd_runner = require "httpd_tests"
-runTestModule(httpd_runner)
-
-local httpd_peg_runner = require "httpd_peg_tests"
-runTestModule(httpd_peg_runner)
+print(ansicolors.blue .. "Running all test suites..." .. ansicolors.reset)
+runTestModule("abnf_test")
+runTestModule("httpd_tests")
+runTestModule("httpd_peg_tests")
+print(ansicolors.blue .. "...Done" .. ansicolors.reset)
