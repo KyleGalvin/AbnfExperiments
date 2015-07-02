@@ -1,5 +1,5 @@
-require "ansicolors"
-local utils = require("utils")
+require "src/ansicolors"
+local utils = require("src/utils")
 
 function testResults(id, name, testFunc)
 	if name and testFunc then
@@ -20,7 +20,7 @@ function runTestModule(moduleName)
 end
 
 function runTestModule(name)
-	local module = require(name)
+	local module = require("tests/"..name)
 	if  module ~= nil then
 		print( ansicolors.white .."Running Test Module: " .. ansicolors.yellow .. name .. ansicolors.reset)
 		for i,v in ipairs(module) do 
@@ -37,7 +37,8 @@ function runTestModule(name)
 end
 
 print(ansicolors.blue .. "Running all test suites..." .. ansicolors.reset)
-runTestModule("abnf_test")
-runTestModule("httpd_tests")
-runTestModule("httpd_peg_tests")
+runTestModule("utils")
+runTestModule("abnf")
+runTestModule("httpd")
+runTestModule("httpd_peg")
 print(ansicolors.blue .. "...Done" .. ansicolors.reset)

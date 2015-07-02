@@ -1,4 +1,3 @@
-require "lpeg"
 
 local windowsNewline = function(input)
 	return input:gsub("([^\r])(\n)%s*","%1\r\n") -- all newlines are windows-style
@@ -15,15 +14,16 @@ local trimPreceedingWhitespace = function (input)
 end
 
 local removeMultipleNewline = function (input)
-	return input -- input:gsub("[\r\n]+","\r\n")
+	return input:gsub("[\r\n]+","\r\n")
 end
 
 local removeMultipleSpaces = function(input)
-	return input --input:gsub("[ ]+","\r\n")
+	return input:gsub("[ ]+"," ")
 end
 
 return {
 	["grammar"] = function()
+		local lpeg = require "lpeg"
 		local V = lpeg.V
 		local P = lpeg.P
 		local R = lpeg.R
@@ -63,7 +63,7 @@ return {
 				function(input) return {["element"] = input} end,
 			["group"] = Ct( P("(") * V("c-wsp")^0 * V("alternation") * V("c-wsp")^0 * P(")") ) / 
 				function(input) return {["group"] = input} end,
-			["option"] = Ct( P("[") * V("c-wsp")^0 * V("alternation") * V("c-wsp")^0 * P(")") ) / 
+			["option"] = Ct( P("[") * V("c-wsp")^0 * V("alternation") * V("c-wsp")^0 * P("]") ) / 
 				function(input) return {["option"] = input} end,
 			["char-val"] = Ct( V("DQUOTE") * ( R("\32\33") + R("\35\128") )^0 * V("DQUOTE") ) / 
 				function(input) return {["char-val"] = input} end,
@@ -97,7 +97,10 @@ return {
 		})
 	end,
 	["normalize"] = function(input)
-		return removeMultipleNewline(trimPreceedingWhitespace(endWithNewline(windowsNewline(input))))
+		return endWithNewline(
+			removeMultipleNewline(
+			trimPreceedingWhitespace(
+			windowsNewline(input))))
 	end,
 	["transform"] = function(input)
 

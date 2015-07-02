@@ -1,0 +1,16 @@
+
+       rulelist       =  1*( rule / (*c-wsp c-nl) )
+
+         rule           =  rulename defined-as elements c-nl
+                                ; continues if next line starts
+                                ;  with white space
+
+         rulename       =  ALPHA *(ALPHA / DIGIT / "-")
+
+
+         defined-as     =  *c-wsp ("=" / "=/") *c-wsp
+                                ; basic rules definition and
+                                ;  incremental alternatives
+
+         elements       =  alternation *c-wsp
+
