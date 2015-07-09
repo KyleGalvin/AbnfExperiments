@@ -1,6 +1,5 @@
 require "src/ansicolors"
 local utils = require("src/utils")
-
 function testResults(id, name, testFunc)
 	if name and testFunc then
 		local status = ""
@@ -40,5 +39,4 @@ print(ansicolors.blue .. "Running all test suites..." .. ansicolors.reset)
 runTestModule("utils")
 runTestModule("abnf")
 runTestModule("httpd")
-runTestModule("httpd_peg")
 print(ansicolors.blue .. "...Done" .. ansicolors.reset)
