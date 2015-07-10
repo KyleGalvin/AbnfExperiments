@@ -48,13 +48,30 @@ return {
 			["rule"] 		= function(input) return {["rule"] = input} end,
 			["rulename"] 		= function(input) return {["rulename"] = input } end,
 			["defined-as"] 		= function(input) return {["defined-as"] = input} end,
-			["elements"] 		= function(input) return {["elements"] = input} end,
+			["elements"] 		= function(input)
+				print("new element")
+				for k,v in pairs(input) do
+					print("type:" .. type(input))
+				end
+				return {["elements"] = input} end,
 			["c-wsp"] 		= function(input) return nil end,
 			["c-nl"] 		= function(input) return nil end,
 			["comment"] 		= function(input) return nil end,
-			["alternation"] 	= function(input) return {["alternation"] = input} end,
-			["concatenation"] 	= function(input) return {["concatenation"] = input} end,
-			["repetition"] 		= function(input) return {["repetition"] = input} end,
+			["alternation"] 	= function(input) 
+				if input[2] then
+					print("alternation")
+				end
+				return {["alternation"] = input} end,
+			["concatenation"] 	= function(input) 
+				if input[2] then
+					print("concatenation")
+				end
+				return {["concatenation"] = input} end,
+			["repetition"] 		= function(input) 
+				if input[2] then
+					print("repetition")
+				end
+				return {["repetition"] = input} end,
 			["repeat"] 		= function(input) return {["repeat"] = input} end,
 			["element"] 		= function(input) return {["element"] = input} end,
 			["group"] 		= function(input) return {["group"] = input} end,
@@ -72,7 +89,7 @@ return {
 			["rule"] 		= Ct( V("rulename") * V("defined-as") * V("elements") * V("c-nl") ) ,
 			["rulename"] 		= C( V("ALPHA") * ( V("ALPHA") + V("DIGIT") + P("-") )^0 ) ,
 			["defined-as"] 		= C( V("c-wsp")^0 * ( P("=") + P("=/") ) * (V("c-wsp") )^0 ) ,
-			["elements"] 		= Cg( V("alternation") * ( V("c-wsp") )^0 ) ,
+			["elements"] 		= Ct( V("alternation") * ( V("c-wsp") )^0 ) ,
 			["c-wsp"] 		= C( V("WSP") + ( V("c-nl") * V("WSP") ) ) ,
 			["c-nl"] 		= C( V("comment") + V("CRLF") ) ,
 			["comment"] 		= C( P(";") * ( V("WSP") + V("VCHAR") )^0 * V("CRLF") ) ,
@@ -195,9 +212,10 @@ return {
 		--utils.printTable2(syntaxTree,2)
 		local preFunc = function(k,v,d)
 				if v[1] and d == 2 then
+					for l,w in pairs(v[3]) do
+						print(l) -- get key
+					end
 					utils.printTable(v[1])
-					--print("\n")
-					--utils.printTable(v[3])
 				end
 		end
 
