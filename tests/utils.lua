@@ -97,8 +97,8 @@ return {
 		
 	end},
 	{name = "utils.pluto.01 - pluto persist complex lua structures", test = function()
-		local pluto = require("pluto")
-		local res = pluto.persist({},testTable)
+		--local pluto = require("pluto")
+		--local res = pluto.persist({},testTable)
 		--print("results: ",res)
 		--utils.writeFile("./plutoResults.txt",res)
 		
