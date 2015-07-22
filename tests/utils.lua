@@ -1,5 +1,5 @@
 local utils = require "src/utils"
-
+local cjson = require "cjson"
 --nodes defined as tables in the input.
 local testTable = { -- the root is not counted as a node
 	["/1"]= { -- each key with a table value is a node

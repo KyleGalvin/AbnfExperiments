@@ -1,5 +1,9 @@
 require "src/ansicolors"
+local cjson = require("cjson")
 local utils = require("src/utils")
+
+local testJSON = {}
+
 function testResults(id, name, testFunc)
 	if name and testFunc then
 		local status = ""
@@ -11,6 +15,11 @@ function testResults(id, name, testFunc)
 		end
 		local status = status .. ": " .. name 
 		print(status)
+		if result then 
+			return 1
+		else
+			return 0
+		end
 	end
 end
 
@@ -19,12 +28,13 @@ function runTestModule(moduleName)
 end
 
 function runTestModule(name)
+	testJSON[name] = {}
 	local module = require("tests/"..name)
 	if  module ~= nil then
 		print( ansicolors.white .."Running Test Module: " .. ansicolors.yellow .. name .. ansicolors.reset)
 		for i,v in ipairs(module) do 
 			if type(v.name) == "string" and type(v.test == "function") then
-				testResults(i, v.name,v.test) 
+				testJSON[name][i .. " " .. v.name] = testResults(i, v.name,v.test)
 			else
 				print("Bad test in module")	
 			end
@@ -40,3 +50,4 @@ runTestModule("utils")
 runTestModule("abnf")
 runTestModule("httpd")
 print(ansicolors.blue .. "...Done" .. ansicolors.reset)
+print(cjson.encode(testJSON))
