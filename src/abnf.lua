@@ -49,9 +49,9 @@ return {
 			["rulename"] 		= function(input) return {["rulename"] = input } end,
 			["defined-as"] 		= function(input) return {["defined-as"] = input} end,
 			["elements"] 		= function(input)
-				print("new element")
+			--	print("new element")
 				for k,v in pairs(input) do
-					print("type:" .. type(input))
+				--	print("type:" .. type(input))
 				end
 				return {["elements"] = input} end,
 			["c-wsp"] 		= function(input) return nil end,
@@ -59,17 +59,17 @@ return {
 			["comment"] 		= function(input) return nil end,
 			["alternation"] 	= function(input) 
 				if input[2] then
-					print("alternation")
+				--	print("alternation")
 				end
 				return {["alternation"] = input} end,
 			["concatenation"] 	= function(input) 
 				if input[2] then
-					print("concatenation")
+				--	print("concatenation")
 				end
 				return {["concatenation"] = input} end,
 			["repetition"] 		= function(input) 
 				if input[2] then
-					print("repetition")
+				--	print("repetition")
 				end
 				return {["repetition"] = input} end,
 			["repeat"] 		= function(input) return {["repeat"] = input} end,
@@ -226,7 +226,7 @@ return {
 		local postFunc = function(k,v,d)
 		end
 
-		utils.treeWalk2(syntaxTree,preFunc,leafFunc,postFunc,2)
+		--utils.treeWalk2(syntaxTree,preFunc,leafFunc,postFunc,2)
 		-- utils.printTable2(syntaxTree)
 			
 			--[[

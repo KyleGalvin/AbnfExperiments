@@ -1,10 +1,6 @@
-print("one")
 require "io"
-print("two")
 local abnfTools = require "src/abnf"
-print("three")
 local utils = require "src/utils"
-print("four")
 local patternStats = function (result,debug)
 	local ruleCount = 0
 	local countRules = function(k,v,depth)
