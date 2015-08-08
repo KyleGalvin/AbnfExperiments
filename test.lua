@@ -34,7 +34,8 @@ function runTestModule(name)
 		print( ansicolors.white .."Running Test Module: " .. ansicolors.yellow .. name .. ansicolors.reset)
 		for i,v in ipairs(module) do 
 			if type(v.name) == "string" and type(v.test == "function") then
-				testJSON[name][i .. " " .. v.name] = testResults(i, v.name,v.test)
+				testJSON[name][i] = {}
+				testJSON[name][i][v.name] = testResults(i, v.name,v.test)
 			else
 				print("Bad test in module")	
 			end
@@ -51,3 +52,5 @@ runTestModule("abnf")
 runTestModule("httpd")
 print(ansicolors.blue .. "...Done" .. ansicolors.reset)
 print(cjson.encode(testJSON))
+
+utils.writeFile("../webapps/public/unitTests.json",cjson.encode(testJSON))

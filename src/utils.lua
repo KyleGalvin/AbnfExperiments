@@ -13,7 +13,8 @@ API.readFile = function(filename)
 	if f then
 		return f:read("*all")
 	else
-		return nil
+		
+		return nil,"File not found!"
 	end
 end
 
