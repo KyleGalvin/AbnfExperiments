@@ -11,16 +11,12 @@ else --android
   C = ffi.load('SDL2')
 end
 
-print("before ffi load")
-
-print("after ffi load")
 local sdl = {C=C}
-local registerdefines = require 'SDL2defines'
+local registerdefines = require './src/SDL2defines'
 
-require 'SDL2cdefs'
+require './src/SDL2cdefs'
 
 local function register(luafuncname, funcname)
- -- print("registering "..luafuncname)
    local symexists, msg = pcall(function()
                               local sym = C[funcname]
                            end)
